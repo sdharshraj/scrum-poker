@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ScrumpokerService } from './scrum-poker.service';
+import { Room } from './Model/Room';
+
 
 @Component({
   selector: 'app-root',
@@ -8,14 +10,5 @@ import { ScrumpokerService } from './scrum-poker.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  roomName: string = "No room defined.";
-
-  constructor(private scrumpokerService: ScrumpokerService, private router: Router) {}
-
-  createRoom() {
-    this.scrumpokerService.createRoom(this.roomName).subscribe((roomId: string) => {
-      console.log("this is a log ", roomId);
-      this.router.navigate([`/room/${roomId}`]);
-    });
-  }
+  roomId: string | null = null;
 }

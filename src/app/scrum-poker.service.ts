@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Room, User } from './Model/Room';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScrumpokerService {
   
+  currentUser : User | undefined;
+  admin: User | undefined;
   private baseUrl = 'https://localhost:7054/api';
 
   constructor(private http: HttpClient) { }
@@ -19,8 +22,21 @@ export class ScrumpokerService {
     this.http.post(`${this.baseUrl}/vote`, { card }).subscribe();
   }
 
-  createRoom(roomName: string): Observable<string> {
-    var room = encodeURI(roomName);
-    return this.http.post<string>(`${this.baseUrl}/Rooms?roomName=${room}`, { name: roomName });
+  createRoom(roomName: string, userName: string): Observable<Room> {
+    const body = {roomName, userName};
+    return this.http.post<Room>(`${this.baseUrl}/Rooms`, body);
+  }
+
+  getRoom(roomId: string): Observable<Room>{
+    return this.http.get<Room>(`${this.baseUrl}/Rooms/${roomId}`);
+  }
+
+  getRoomUsers(roomId: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/Rooms/users/${roomId}`);
+  }
+
+  addUserToRoom(roomId: string | null | undefined, userName: string): Observable<User> {
+    const body = {userName, roomId };
+    return this.http.post<User>(`${this.baseUrl}/Rooms/JoinRoom`, body);
   }
 }
