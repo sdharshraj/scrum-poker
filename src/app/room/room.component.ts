@@ -18,7 +18,9 @@ export class RoomComponent {
   userVote: string | undefined;
   isCreator = false;
   selectedCard: number = -1;
-
+  currentStory: string = '';
+  cards: string[] = ['0', '1/2', '1', '2', '3', '5', '8', '13', '20', '?'];
+  currentUser : User | undefined;
   constructor(private route: ActivatedRoute, private scrumPokerService: ScrumpokerService) {}
 
   ngOnInit() {
@@ -27,7 +29,7 @@ export class RoomComponent {
       this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
         this.room = room;
         this.votes = this.room.votes;
-        this.isCreator = this.roomId === this.room.createdBy.roomId;
+        this.isCreator = this.room.id == this.scrumPokerService.admin?.roomId;
         this.welcomeMessage = `Welcome, ${this.room.createdBy.name}`;
       });
 
@@ -35,5 +37,17 @@ export class RoomComponent {
         this.users = users;
       });
     }
+  }
+  joinRoom(): void {
+    if(this.userName){
+      this.scrumPokerService.addUserToRoom(this.roomId, this.userName).subscribe((user : User) => {
+        console.log("logdfsfds", user);
+        this.currentUser = user;
+      });
+    }
+  }
+  vote(card: string): void {
+    console.log(card);
+    this.scrumPokerService.vote(card);
   }
 }

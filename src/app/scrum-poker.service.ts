@@ -8,6 +8,8 @@ import { Room, User } from './Model/Room';
 })
 export class ScrumpokerService {
   
+  currentUser : User | undefined;
+  admin: User | undefined;
   private baseUrl = 'https://localhost:7054/api';
 
   constructor(private http: HttpClient) { }
@@ -22,7 +24,6 @@ export class ScrumpokerService {
 
   createRoom(roomName: string, userName: string): Observable<Room> {
     const body = {roomName, userName};
-    var room = encodeURI(roomName);
     return this.http.post<Room>(`${this.baseUrl}/Rooms`, body);
   }
 
@@ -32,5 +33,10 @@ export class ScrumpokerService {
 
   getRoomUsers(roomId: string): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/Rooms/users/${roomId}`);
+  }
+
+  addUserToRoom(roomId: string | null | undefined, userName: string): Observable<User> {
+    const body = {userName, roomId };
+    return this.http.post<User>(`${this.baseUrl}/Rooms/JoinRoom`, body);
   }
 }
