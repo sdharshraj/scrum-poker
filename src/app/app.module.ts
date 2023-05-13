@@ -11,11 +11,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AddMemberComponent } from './add-member/add-member.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainScreenComponent
+    MainScreenComponent,
+    AddMemberComponent
   ],
   imports: [
     BrowserModule,

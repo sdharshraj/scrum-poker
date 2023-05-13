@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Room } from './Model/Room';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,9 @@ export class ScrumpokerService {
     this.http.post(`${this.baseUrl}/vote`, { card }).subscribe();
   }
 
-  createRoom(roomName: string): Observable<string> {
+  createRoom(roomName: string, userName: string): Observable<Room> {
+    const body = {roomName, userName};
     var room = encodeURI(roomName);
-    return this.http.post<string>(`${this.baseUrl}/Rooms?roomName=${room}`, { name: roomName });
+    return this.http.post<Room>(`${this.baseUrl}/Rooms`, body);
   }
 }
