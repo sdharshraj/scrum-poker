@@ -1,0 +1,29 @@
+<div *ngIf="room">
+    <h1>{{ welcomeMessage }}</h1>
+
+    <h3>{{ room.roomName }}</h3>
+    <p>Room ID: {{ room.id }}</p>
+    <p>Admin: {{room.createdBy.name}}</p>
+</div>
+<div class="vote-cards">
+    <app-scrum-vote-card value="0" [selected]="selectedCard === 0"></app-scrum-vote-card>
+    <app-scrum-vote-card value="1" [selected]="selectedCard === 1"></app-scrum-vote-card>
+    <app-scrum-vote-card value="2" [selected]="selectedCard === 2"></app-scrum-vote-card>
+    <app-scrum-vote-card value="3" [selected]="selectedCard === 3"></app-scrum-vote-card>
+    <app-scrum-vote-card value="5" [selected]="selectedCard === 5"></app-scrum-vote-card>
+    <app-scrum-vote-card value="8" [selected]="selectedCard === 8"></app-scrum-vote-card>
+    <app-scrum-vote-card value="13" [selected]="selectedCard === 13"></app-scrum-vote-card>
+    <app-scrum-vote-card value="?" [selected]="selectedCard === -1"></app-scrum-vote-card>
+  </div>  
+
+  <div *ngIf="isCreator">
+    <h2>Other users in the room:</h2>
+    <ul>
+      <li *ngFor="let user of users">{{ user.name }} - {{ user.vote }}</li>
+    </ul>
+  </div>
+  
+  
+<div *ngIf="!room">
+    <p>Loading...</p>
+</div>

@@ -10,15 +10,5 @@ import { Room } from './Model/Room';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  roomName: string = "No room defined.";
-  userName: string = '';
-
-  constructor(private scrumpokerService: ScrumpokerService, private router: Router) {}
-
-  createRoom() {
-    this.scrumpokerService.createRoom(this.roomName, this.userName).subscribe((response: Room) => {
-      console.log(response);
-      this.router.navigate(['/room',response.id]);
-    });
-  }
+  roomId: string | null = null;
 }

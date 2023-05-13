@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Room } from './Model/Room';
+import { Room, User } from './Model/Room';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +24,13 @@ export class ScrumpokerService {
     const body = {roomName, userName};
     var room = encodeURI(roomName);
     return this.http.post<Room>(`${this.baseUrl}/Rooms`, body);
+  }
+
+  getRoom(roomId: string): Observable<Room>{
+    return this.http.get<Room>(`${this.baseUrl}/Rooms/${roomId}`);
+  }
+
+  getRoomUsers(roomId: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/Rooms/users/${roomId}`);
   }
 }
