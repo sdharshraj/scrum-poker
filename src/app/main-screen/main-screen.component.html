@@ -1,0 +1,11 @@
+<h1>Welcome to Scrum Poker</h1>
+<div class="current-story">
+  <h2>Current Story</h2>
+  <p>{{ currentStory }}</p>
+</div>
+<div class="cards">
+  <h2>Choose a card</h2>
+  <div class="card" *ngFor="let card of cards" (click)="vote(card)">
+    {{ card }}
+  </div>
+</div>
