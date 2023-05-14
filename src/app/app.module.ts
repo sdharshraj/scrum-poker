@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ScrumpokerService } from './scrum-poker.service';
-import { MainScreenComponent } from './main-screen/main-screen.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +18,6 @@ import { ScrumVoteCardComponent } from './scrum-vote-card/scrum-vote-card.compon
 @NgModule({
   declarations: [
     AppComponent,
-    MainScreenComponent,
     AddMemberComponent,
     RoomComponent,
     CreateRoomComponent,
