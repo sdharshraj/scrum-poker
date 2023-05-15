@@ -4,6 +4,7 @@ export interface Room {
     users: User[];
     votes: Vote[];
     createdBy: User;
+    adminId: string;
   }
   
   export interface User {

@@ -9,8 +9,8 @@ import { Room, User } from './Model/Room';
 export class ScrumpokerService {
   
   currentUser : User | undefined;
-  admin: User | undefined;
   private baseUrl = 'https://localhost:7054/api';
+  adminId: string | undefined;
 
   constructor(private http: HttpClient) { }
 
@@ -18,8 +18,9 @@ export class ScrumpokerService {
     return this.http.get<string>(`${this.baseUrl}/current-story`);
   }
 
-  vote(card: string): void {
-    this.http.post(`${this.baseUrl}/vote`, { card }).subscribe();
+  UserVote(vote: string, userId: string, roomId: string) {
+    const body = {vote, userId, roomId};
+    this.http.post(`${this.baseUrl}/Rooms/UserVote`, body).subscribe();
   }
 
   createRoom(roomName: string, userName: string): Observable<Room> {

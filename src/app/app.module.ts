@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ScrumpokerService } from './scrum-poker.service';
-import { MainScreenComponent } from './main-screen/main-screen.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,11 +14,12 @@ import { AddMemberComponent } from './add-member/add-member.component';
 import { RoomComponent } from './room/room.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { ScrumVoteCardComponent } from './scrum-vote-card/scrum-vote-card.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainScreenComponent,
     AddMemberComponent,
     RoomComponent,
     CreateRoomComponent,
@@ -34,7 +34,9 @@ import { ScrumVoteCardComponent } from './scrum-vote-card/scrum-vote-card.compon
     MatButtonModule,
     MatInputModule,
     MatIconModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    ClipboardModule,
+    MatSnackBarModule
   ],
   providers: [ScrumpokerService],
   bootstrap: [AppComponent]
