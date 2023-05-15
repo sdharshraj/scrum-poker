@@ -1,1 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+.custom-snackbar {
+    top: 0;
+    right: 0;
+    transform: translate(-10px, 10px); /* Adjust the translation values as needed */
+  }
+  

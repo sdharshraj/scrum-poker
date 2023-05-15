@@ -14,6 +14,8 @@ import { AddMemberComponent } from './add-member/add-member.component';
 import { RoomComponent } from './room/room.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { ScrumVoteCardComponent } from './scrum-vote-card/scrum-vote-card.component';
+import { ClipboardModule } from 'ngx-clipboard';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { ScrumVoteCardComponent } from './scrum-vote-card/scrum-vote-card.compon
     MatButtonModule,
     MatInputModule,
     MatIconModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    ClipboardModule,
+    MatSnackBarModule
   ],
   providers: [ScrumpokerService],
   bootstrap: [AppComponent]

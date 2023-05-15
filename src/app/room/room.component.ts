@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ScrumpokerService } from '../scrum-poker.service';
 import { Room, User, Vote } from '../Model/Room';
 import * as signalR from "@microsoft/signalr";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { timer } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-room',
@@ -23,11 +26,15 @@ export class RoomComponent {
   currentUser: User | undefined;
   private hubConnection: signalR.HubConnection | undefined;
   notificationMessage: string = '';
+  baseUrl : string = "https://localhost:7054";
+  inviteLink: string | undefined;
 
-  constructor(private route: ActivatedRoute, private scrumPokerService: ScrumpokerService) {
+  constructor(private route: ActivatedRoute, 
+    private scrumPokerService: ScrumpokerService,
+    private snackBar: MatSnackBar) {
     // Create a new SignalR connection
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7054/roomhub")
+      .withUrl(`${this.baseUrl}/roomhub`)
       .build();
   }
 
@@ -48,7 +55,7 @@ export class RoomComponent {
         // Register the UserJoined event handler
         this.hubConnection?.on("UserJoined", (username: string) => {
           if (username && this.roomId) {
-            this.notificationMessage = `User ${username} is joined.`;
+            this.showNotification(`${username} joined the Room.`);
             this.scrumPokerService.getRoomUsers(this.roomId).subscribe((users: User[]) => {
               this.users = users;
             });
@@ -56,13 +63,11 @@ export class RoomComponent {
         });
 
         this.hubConnection?.on("UserVoted", (vote: number) => {
-          console.log("user voted ", vote);
           if (vote && this.roomId) {
             this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
               this.room = room;
-              console.log(" Room object : ",this.room);
               this.users = this.room.users;
-              this.isCreator = this.room.id == this.scrumPokerService.admin?.roomId;
+              this.isCreator = this.room.adminId == this.scrumPokerService.adminId;
             });
           }
         });
@@ -72,11 +77,11 @@ export class RoomComponent {
     }
 
     if (this.roomId) {
+      this.setInviteLink();
       this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
         this.room = room;
         this.votes = this.room.votes;
-        this.isCreator = this.room.id == this.scrumPokerService.admin?.roomId;
-        this.welcomeMessage = `Welcome, ${this.room.createdBy.name}`;
+        this.isCreator = this.room.adminId == this.scrumPokerService.adminId;
       });
 
       this.scrumPokerService.getRoomUsers(this.roomId).subscribe((users: User[]) => {
@@ -88,6 +93,9 @@ export class RoomComponent {
     if (this.userName) {
       this.scrumPokerService.addUserToRoom(this.roomId, this.userName).subscribe((user: User) => {
         this.currentUser = user;
+        this.scrumPokerService.currentUser = user;
+        this.welcomeMessage = `Welcome, ${this.scrumPokerService.currentUser?.name}`;
+        console.log(this.scrumPokerService.currentUser);
       });
     }
   }
@@ -96,6 +104,27 @@ export class RoomComponent {
     if (this.currentUser)
       this.scrumPokerService.UserVote(card, this.currentUser.id, this.currentUser.roomId);
   }
+
+  showNotification(message: string): void {
+    const snackBarRef = this.snackBar.open(message, 'Dismiss', {
+      duration: 1500, 
+      panelClass: 'custom-snackbar', 
+    });
+  
+    // Automatically dismiss the snackbar after 2 seconds
+    timer(1500)
+      .pipe(take(1))
+      .subscribe(() => snackBarRef.dismiss());
+  }
+  
+  onCopySuccess() {
+    this.showNotification('Invite link copied.');
+  }  
+
+  setInviteLink() {
+    this.inviteLink =  `http://localhost:4200/room/${this.roomId}`;
+  }  
+  
 }
 
 

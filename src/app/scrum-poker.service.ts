@@ -9,8 +9,8 @@ import { Room, User } from './Model/Room';
 export class ScrumpokerService {
   
   currentUser : User | undefined;
-  admin: User | undefined;
   private baseUrl = 'https://localhost:7054/api';
+  adminId: string | undefined;
 
   constructor(private http: HttpClient) { }
 

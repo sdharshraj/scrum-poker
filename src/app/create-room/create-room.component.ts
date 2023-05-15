@@ -18,8 +18,8 @@ export class CreateRoomComponent {
   createRoom() {
     this.scrumpokerService.createRoom(this.roomName, this.userName).subscribe((room: Room) => {
       this.roomId = room.id;
+      this.scrumpokerService.adminId = room.adminId;
       this.router.navigate([`/room/${room.id}`]);
-      this.scrumpokerService.admin = room.createdBy;
     });
   }
 }

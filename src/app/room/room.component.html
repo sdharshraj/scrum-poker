@@ -1,9 +1,9 @@
 <div *ngIf="room">
-    <h1>{{ welcomeMessage }}</h1>
+    <h1 *ngIf="welcomeMessage">{{ welcomeMessage }}</h1>
 
-    <h3>{{ room.roomName }}</h3>
-    <p>Room ID: {{ room.id }}</p>
-    <p>Admin: {{room.createdBy.name}}</p>
+    <h3>Room name: {{ room.roomName }}</h3>
+    <button ngxClipboard [cbContent]="inviteLink" (cbOnSuccess)="onCopySuccess()">Copy Link</button>
+    <p>Admin: {{room.createdBy}}</p>
 </div>
 
 <div *ngIf="!isCreator && !currentUser">
