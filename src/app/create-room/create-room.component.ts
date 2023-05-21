@@ -9,13 +9,14 @@ import { Room } from '../Model/Room';
   styleUrls: ['./create-room.component.css']
 })
 export class CreateRoomComponent {
-  roomName: string = "No room defined.";
+  roomName: string = '';
   userName: string = '';
   roomId: string = '';
 
   constructor(private scrumpokerService: ScrumpokerService, private router: Router) {}
 
   createRoom() {
+    console.log("rooma name: " + this.roomName + "user name " +  this.userName);
     this.scrumpokerService.createRoom(this.roomName, this.userName).subscribe((room: Room) => {
       this.roomId = room.id;
       this.scrumpokerService.adminId = room.adminId;

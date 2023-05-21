@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
 
 const routes: Routes = [
-  { path: '', component: AppComponent },
+  { path: '', component: CreateRoomComponent },
   { path: 'room/:id', component: RoomComponent },
   { path: 'create-room', component: CreateRoomComponent },
 ];

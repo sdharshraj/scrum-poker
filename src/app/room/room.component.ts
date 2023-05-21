@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ScrumpokerService } from '../scrum-poker.service';
 import { Room, User, Vote } from '../Model/Room';
 import * as signalR from "@microsoft/signalr";
@@ -28,10 +28,12 @@ export class RoomComponent {
   notificationMessage: string = '';
   baseUrl : string = "https://localhost:7054";
   inviteLink: string | undefined;
+  showVote: boolean = false;
 
   constructor(private route: ActivatedRoute, 
     private scrumPokerService: ScrumpokerService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private router: Router) {
     // Create a new SignalR connection
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${this.baseUrl}/roomhub`)
@@ -62,6 +64,15 @@ export class RoomComponent {
           }
         });
 
+        this.hubConnection?.on("UserRemoved", (username: string) => {
+          if (username && this.roomId) {
+            this.showNotification(`${username} left the Room.`);
+            this.scrumPokerService.getRoomUsers(this.roomId).subscribe((users: User[]) => {
+              this.users = users;
+            });
+          }
+        });
+
         this.hubConnection?.on("UserVoted", (vote: number) => {
           if (vote && this.roomId) {
             this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
@@ -77,28 +88,49 @@ export class RoomComponent {
     }
 
     if (this.roomId) {
-      this.setInviteLink();
       this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
         this.room = room;
         this.votes = this.room.votes;
         this.isCreator = this.room.adminId == this.scrumPokerService.adminId;
-      });
+        this.hubConnection?.invoke('UpdateJoinedUsername', this.room.createdBy, this.roomId);
+      },
+      (error: any) => {
+        // Handle the error here
+        // Redirect to the home page or perform any other desired action
+        console.error('Error getting room:', error);
+        // Redirect to home page
+        this.router.navigate(['/']);
+      }
+    );
 
       this.scrumPokerService.getRoomUsers(this.roomId).subscribe((users: User[]) => {
         this.users = users;
       });
+      this.setInviteLink();
     }
   }
   joinRoom(): void {
     if (this.userName) {
-      this.scrumPokerService.addUserToRoom(this.roomId, this.userName).subscribe((user: User) => {
-        this.currentUser = user;
-        this.scrumPokerService.currentUser = user;
-        this.welcomeMessage = `Welcome, ${this.scrumPokerService.currentUser?.name}`;
-        console.log(this.scrumPokerService.currentUser);
-      });
+      this.scrumPokerService.addUserToRoom(this.roomId, this.userName).subscribe(
+        (user: User) => {
+          this.currentUser = user;
+          this.scrumPokerService.currentUser = user;
+          this.welcomeMessage = `Welcome, ${this.scrumPokerService.currentUser?.name}`;
+          this.hubConnection?.invoke('UpdateJoinedUsername', this.userName, this.roomId);
+        },
+        (error: any) => {
+          if (error && error.status === 409) {
+            console.log("Conflict: User already exists in the room.", error);
+            this.showNotification(`${this.userName} already exists in the room. Please select a different name.`);
+          } else {
+            console.error("An error occurred while joining the room.", error);
+          }
+        }
+      );
     }
   }
+  
+  
 
   vote(card: string) {
     if (this.currentUser)
@@ -124,7 +156,10 @@ export class RoomComponent {
   setInviteLink() {
     this.inviteLink =  `http://localhost:4200/room/${this.roomId}`;
   }  
-  
+
+  toggleVoteVisibility() {
+    this.showVote = !this.showVote;
+  }
 }
 
 
