@@ -1,34 +1,109 @@
-<div *ngIf="room">
-    <h1 *ngIf="welcomeMessage">{{ welcomeMessage }}</h1>
+<div class="services_section">
+    <div class="container" *ngIf="room">
+        <h1 class="services_text" *ngIf="welcomeMessage">{{ welcomeMessage }}</h1>
+        <h1 class="services_text" *ngIf="isCreator">Welcome, {{room.createdBy}}</h1>
 
-    <h3>Room name: {{ room.roomName }}</h3>
-    <button ngxClipboard [cbContent]="inviteLink" (cbOnSuccess)="onCopySuccess()">Copy Link</button>
-    <p>Admin: {{room.createdBy}}</p>
-</div>
-
-<div *ngIf="!isCreator && !currentUser">
-    <mat-label>Username: </mat-label>
-    <mat-form-field>
-        <input matInput placeholder="Your name" [(ngModel)]="userName">
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="joinRoom()">Join Room</button>
-</div>
-
-<div *ngIf="currentUser" class="cards">
-    <h2>Choose a card</h2>
-    <div class="card" *ngFor="let card of cards" (click)="vote(card)">
-      {{ card }}
+        <h3>Room: {{ room.roomName }}</h3>
+        <p>Admin: {{ room.createdBy }}</p>
+        <p>
+            <button class="btn btn-lg btn-primary btn-block" ngxClipboard [cbContent]="inviteLink"
+                (cbOnSuccess)="onCopySuccess()">Copy
+                Link</button>
+        </p>
     </div>
-  </div> 
+</div>
 
-  <div *ngIf="isCreator">
-    <h2>Other users in the room:</h2>
-    <ul>
-      <li *ngFor="let user of users">{{ user.name }} - {{ user.vote }}</li>
-    </ul>
-  </div>
-  
-  
-<div *ngIf="!room">
+<div class="companies_section layout_padding">
+    <div class="container">
+        <h1 *ngIf="!isCreator && !currentUser" class="companies_text">Join room</h1>
+        <div class="row">
+            <div *ngIf="!isCreator && !currentUser" class="join-room-section">
+                <div class="custom-control mb-3">
+                    <label class="custom-control-label" for="input-userName">Enter your name:</label>
+                </div>
+                <div class="form-label-group">
+                    <input class="form-control" placeholder="Your name" [(ngModel)]="userName">
+                </div>
+                <div class="">
+                    <button class="find_bt" (click)="joinRoom()">Join Room</button>
+                </div>
+            </div>
+            <div class="container">
+                <div *ngIf="currentUser" class="cards">
+                    <h1>Choose a card</h1>
+                    <p></p>
+                    <hr>
+                    <div class="card" *ngFor="let card of cards" (click)="vote(card)">
+                        {{ card }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="companies_section layout_padding">
+    <div class="container">
+        <div class="row">
+            <div *ngIf="isCreator" class="other-users-section">
+                <div *ngIf="(!users || users.length === 0); else elseBlock">
+                    <h1 class="companies_text">No users in the room.</h1>
+                </div>
+                <ng-template #elseBlock>
+                    <h1 class="companies_text">Users in the room.</h1>
+                    <button class="btn btn-lg btn-primary btn-block" *ngIf="showVote"
+                        (click)="toggleVoteVisibility()">Hide
+                        Vote</button>
+                    <button class="btn btn-lg btn-primary btn-block" *ngIf="!showVote"
+                        (click)="toggleVoteVisibility()">Show
+                        Vote</button>
+                    <!-- here -->
+                    <div class="container mt-3 mb-4">
+                        <div class="col-lg-9 mt-4 mt-lg-0">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+                                        <table class="table manage-candidates-top mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>User Name</th>
+                                                    <th class="text-center">Vote</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="candidates-list" *ngFor="let user of users">
+                                                    <td class="title">
+                                                        <div class="candidate-list-details">
+                                                            <div class="candidate-list-info">
+                                                                <div class="candidate-list-title">
+                                                                    <h5 class="mb-0">{{user.name}}</h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="candidate-list-favourite-time text-center">
+                                                        <span class="candidate-list-time order-1"
+                                                            *ngIf="showVote">{{user.vote}}</span>
+                                                        <span class="candidate-list-time order-1"
+                                                            *ngIf="!showVote">🥷</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- here end -->
+                </ng-template>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div *ngIf="!room" class="loading-section">
     <p>Loading...</p>
 </div>

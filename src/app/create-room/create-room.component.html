@@ -1,10 +1,37 @@
-<div class="create-room" *ngIf="!roomId">
-    <h1>Create a Room</h1>
-    <mat-form-field>
-      <input matInput placeholder="Room name" [(ngModel)]="roomName">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Your name" [(ngModel)]="userName">
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="createRoom()">Create Room</button>
+
+<div class="services_section">
+    <div class="container">
+      <h1 class="services_text">CREATE ROOM</h1>
+    </div>
 </div>
+<div class="login_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+              <h5 class="card-title text-center">Room details please!</h5>
+              <form class="form-signin">
+                <div class="custom-control mb-3">
+                    <label class="custom-control-label" for="input-roomName">Enter room name:</label>
+                </div>
+                <div class="form-label-group">
+                  <input [(ngModel)]="roomName" id="input-roomName" name="input-roomName" class="form-control" autofocus>
+                </div>
+                <div class="custom-control mb-3">
+                    <label class="custom-control-label" for="input-userName">Your name:</label>
+                </div>
+                <div class="form-label-group">
+                  <input [(ngModel)]="userName" id="input-userName" name="input-userName" class="form-control" >
+                </div>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" (click)="createRoom()">Create room!</button>
+                <hr class="my-4">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
