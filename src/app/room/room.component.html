@@ -3,53 +3,91 @@
         <h1 class="services_text" *ngIf="welcomeMessage">{{ welcomeMessage }}</h1>
         <h1 class="services_text" *ngIf="isCreator">Welcome, {{room.createdBy}}</h1>
 
-        <div class="container">
             <div class="row">
-              <div class="col-sm">
-                <h3>Room: {{ room.roomName }}</h3>
-                <p>Admin: {{ room.createdBy }}</p>
-              </div>
-              <div class="col-sm"></div>
-              <div class="col-sm"></div>
-              <div class="col-sm">
+                <div class="col-sm">
+                    <h3>Room: {{ room.roomName }}</h3>
+                    <p>Admin: {{ room.createdBy }}</p>
+                </div>
+                <div class="col-sm"></div>
+                <div class="col-sm"></div>
+                <div class="col-sm">
                     <button class="btn btn-success btn-block" ngxClipboard [cbContent]="inviteLink"
                         (cbOnSuccess)="onCopySuccess()">Copy room link 🔗</button>
-                    <button style="float: right;" class="btn btn-secondary btn-block" (click)="navigateToHome()">New room 👉</button>
-              </div>
+                    <button style="float: right;" class="btn btn-secondary btn-block" (click)="navigateToHome()">New
+                        room 👉</button>
+                </div>
             </div>
+    </div>
+
+    <div class="container" *ngIf="!isCreator && !currentUser">
+        <h1 class="best_taital">Enter your name to join the room.</h1>
+        <div class="box_main">
+            <input class="form-control email_bt" placeholder="Your name" [(ngModel)]="userName">
+            <button class="subscribe_bt" (click)="joinRoom()">Join Room</button>
         </div>
     </div>
 </div>
 
+<!-- Room user section -->
 <div class="companies_section layout_padding">
     <div class="container">
-        <h1 *ngIf="!isCreator && !currentUser" class="companies_text">Join room</h1>
         <div class="row">
-            <div *ngIf="!isCreator && !currentUser" class="join-room-section">
-                <div class="custom-control mb-3">
-                    <label class="custom-control-label" for="input-userName">Enter your name:</label>
-                </div>
-                <div class="form-label-group">
-                    <input class="form-control" placeholder="Your name" [(ngModel)]="userName">
-                </div>
-                <div class="">
-                    <button class="find_bt" (click)="joinRoom()">Join Room</button>
-                </div>
-            </div>
-            <div class="container">
-                <div *ngIf="currentUser" class="cards">
-                    <h1>Choose a card</h1>
-                    <p></p>
-                    <hr>
-                    <div class="card" *ngFor="let card of cards" (click)="vote(card)">
-                        {{ card }}
+            <div *ngIf="currentUser" class="other-users-section">
+                <div class="container mt-3 mb-4">
+                    <div class="col-lg-12 mt-4 mt-lg-0">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="companies_text">Users in the room</h3>
+                                <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+                                    <table class="table manage-candidates-top mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>User Name 😎</th>
+                                                <th class="text-center">Vote ✍️</th>
+                                                <th class="text-center">Voted ❓</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="candidates-list" *ngFor="let user of users">
+                                                <td class="title">
+                                                    <div class="candidate-list-details">
+                                                        <div class="candidate-list-info">
+                                                            <div class="candidate-list-title">
+                                                                <h5 class="mb-0">{{user.name}}</h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="candidate-list-favourite-time text-center">
+                                                    <span class="candidate-list-time order-1"
+                                                        *ngIf="showVote || user.name === currentUser.name">{{user.vote}}</span>
+                                                    <span class="candidate-list-time order-1"
+                                                        *ngIf="!showVote && user.name !== currentUser.name">🤔</span>
+                                                </td>
+                                                <td class="candidate-list-favourite-time text-center">
+                                                    <span class="candidate-list-time order-1" *ngIf="user.vote">✅</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="companies_text">Cast your vote!</h3>
+                                <div class="container">
+                                    <div *ngIf="currentAdmin" class="cards">
+                                        <div class="card" *ngFor="let card of cards" (click)="vote(card)">
+                                            {{ card }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="companies_section layout_padding">
     <div class="container">
         <div class="row">
             <div *ngIf="isCreator" class="other-users-section">
@@ -60,11 +98,14 @@
                                 <h3 class="companies_text">Users in the room</h3>
                                 <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
                                     <div class="div-btn-vote">
-                                        <button class="btn btn-showVote btn-primary btn-block" *ngIf="showVote" (click)="toggleVoteVisibility()">Hide
+                                        <button class="btn btn-showVote btn-primary btn-block" *ngIf="showVote"
+                                            (click)="toggleVoteVisibility()">Hide
                                             Vote</button>
-                                        <button class="btn btn-showVote btn-primary btn-block" *ngIf="!showVote" (click)="toggleVoteVisibility()">Show
+                                        <button class="btn btn-showVote btn-primary btn-block" *ngIf="!showVote"
+                                            (click)="toggleVoteVisibility()">Show
                                             Vote</button>
-                                        <button class="btn btn-showVote btn-danger btn-block" (click)="clearVote()">Reset votes</button>
+                                        <button class="btn btn-showVote btn-danger btn-block"
+                                            (click)="clearVote()">Reset votes</button>
                                     </div>
                                     <table class="table manage-candidates-top mb-0">
                                         <thead>
@@ -92,8 +133,7 @@
                                                         *ngIf="!showVote">🤔</span>
                                                 </td>
                                                 <td class="candidate-list-favourite-time text-center">
-                                                    <span class="candidate-list-time order-1"
-                                                        *ngIf="user.vote">✅</span>
+                                                    <span class="candidate-list-time order-1" *ngIf="user.vote">✅</span>
                                                 </td>
                                             </tr>
                                         </tbody>
