@@ -1,66 +1,175 @@
 h1 {
-    text-align: center;
-  }
-  .div-btn-vote{
-    float: right;
-  }
-  
-  .btn-showVote{
-    padding: 10px;
-    margin: 10px;
-  }
-  .current-story {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-    border: 1px solid black;
-    font-size: 2em;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .room-details {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  .room-details .title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .room-details .copy-link-button {
-    margin-bottom: 10px;
-  }
-  
-  .room-details .other-users-section {
-    margin-top: 20px;
-  }
-  
-  .room-details .vote-toggle-button {
-    margin-right: 10px;
-  }
-  
-  .room-details .loading-section {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
+  text-align: center;
+}
+
+.div-btn-vote {
+  float: right;
+}
+
+.subscribe_bt {
+  width: 30%;
+  background-color: #313233;
+  float: right;
+  padding: 9px 14px;
+  color: #fff;
+  height: 50px;
+  font-size: 16px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.subscribe_bt_2 {
+  width: 20%;
+  background-color: #313233;
+  float: right;
+  padding: 9px 14px;
+  color: #fff;
+  height: 50px;
+  font-size: 16px;
+  border-radius: 20px;
+  top: -55px;
+  position: relative;
+  right: 5px;
+}
+
+.email_bt {
+  width: 70%;
+  float: left;
+  font-size: 16px;
+  color: #c3c2c2;
+  background-color: #ffffff;
+  text-align: left;
+  padding-left: 15px;
+  height: 50px;
+  border: 0px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.email_bt_2 {
+  width: 100%;
+  float: left;
+  font-size: 16px;
+  color: #c3c2c2;
+  background-color: #ffffff;
+  text-align: left;
+  padding-left: 15px;
+  height: 60px;
+  border: 0px;
+  border-radius: 20px;
+  padding-right: 250px;
+  padding-top: 16px;
+}
+
+.subscribe_bt_2 a {
+  color: #ffffff;
+}
+
+.subscribe_bt a {
+  color: #ffffff;
+}
+
+.box_main {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 30px !important;
+  display: flex;
+}
+
+.box_main_2 {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 30px !important;
+  display: flex;
+}
+
+.layout_padding {
+  padding-top: 90px;
+  padding-bottom: 0px;
+}
+
+.best_taital {
+  width: 100%;
+  float: left;
+  font-size: 60px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.banner_section {
+  width: 100%;
+  float: left;
+  background-image: url(src/assets/images/banner-bg.png);
+  height: auto;
+  padding-bottom: 90px;
+  background-size: cover;
+}
+
+.btn-showVote {
+  padding: 10px;
+  margin: 10px;
+}
+
+.current-story {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  color: green;
+  font-weight: bold;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  border: 1px solid black;
+  font-size: 2em;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: aqua;
+}
+.candidate-list-time{
+  color: green;
+  font-size: larger;
+  font-weight: bolder;
+}
+.room-details {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.room-details .title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.room-details .copy-link-button {
+  margin-bottom: 10px;
+}
+
+.room-details .other-users-section {
+  margin-top: 20px;
+}
+
+.room-details .vote-toggle-button {
+  margin-right: 10px;
+}
+
+.room-details .loading-section {
+  text-align: center;
+  margin-top: 20px;
+}

@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { timer } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-room',
@@ -31,11 +32,13 @@ export class RoomComponent {
   inviteLink: string | undefined;
   showVote: boolean = false;
   currentAdmin: User | undefined;
+  private appUrl = environment.appUrl;
 
-  constructor(private route: ActivatedRoute, 
+  constructor(private route: ActivatedRoute,
     private scrumPokerService: ScrumpokerService,
     private snackBar: MatSnackBar,
-    private router: Router) {
+    private router: Router,
+    private location: Location) {
     // Create a new SignalR connection
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${this.eventUrl}/roomhub`)
@@ -108,14 +111,14 @@ export class RoomComponent {
         this.currentAdmin = room.users[0]
         this.hubConnection?.invoke('UpdateJoinedUsername', this.room.createdBy, this.roomId);
       },
-      (error: any) => {
-        // Handle the error here
-        // Redirect to the home page or perform any other desired action
-        console.error('Error getting room:', error);
-        // Redirect to home page
-        this.router.navigate(['/']);
-      }
-    );
+        (error: any) => {
+          // Handle the error here
+          // Redirect to the home page or perform any other desired action
+          console.error('Error getting room:', error);
+          // Redirect to home page
+          this.router.navigate(['/']);
+        }
+      );
 
       this.scrumPokerService.getRoomUsers(this.roomId).subscribe((users: User[]) => {
         this.users = users;
@@ -143,8 +146,6 @@ export class RoomComponent {
       );
     }
   }
-  
-  
 
   vote(card: string) {
     if (this.currentUser)
@@ -156,36 +157,38 @@ export class RoomComponent {
       this.scrumPokerService.UserVote(card, this.currentAdmin.id, this.currentAdmin.roomId);
   }
 
-  clearVote(){
-    if(this.currentAdmin)
+  clearVote() {
+    if (this.currentAdmin) {
+      this.showVote = false;
       this.scrumPokerService.ClearVote(this.currentAdmin.roomId);
+    }
   }
 
   showNotification(message: string): void {
     const snackBarRef = this.snackBar.open(message, 'Dismiss', {
-      duration: 1500, 
-      panelClass: 'custom-snackbar', 
+      duration: 1500,
+      panelClass: 'custom-snackbar',
     });
-  
+
     // Automatically dismiss the snackbar after 2 seconds
     timer(1500)
       .pipe(take(1))
       .subscribe(() => snackBarRef.dismiss());
   }
-  
+
   onCopySuccess() {
     this.showNotification('Invite link copied.');
-  }  
+  }
 
   setInviteLink() {
-    this.inviteLink =  `http://localhost:4200/room/${this.roomId}`;
-  }  
+    this.inviteLink = `${this.appUrl}/room/${this.roomId}`;
+  }
 
   toggleVoteVisibility() {
     this.showVote = !this.showVote;
   }
 
-  navigateToHome(){
+  navigateToHome() {
     this.router.navigate(['/']);
   }
 }
