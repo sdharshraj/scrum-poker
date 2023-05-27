@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Room, User } from './Model/Room';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { Room, User } from './Model/Room';
 export class ScrumpokerService {
   
   currentUser : User | undefined;
-  private baseUrl = 'https://localhost:7054/api';
+  private baseUrl = environment.apiUrl;
   adminId: string | undefined;
 
   constructor(private http: HttpClient) { }
