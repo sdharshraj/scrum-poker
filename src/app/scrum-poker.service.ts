@@ -24,6 +24,11 @@ export class ScrumpokerService {
     this.http.post(`${this.baseUrl}/Rooms/UserVote`, body).subscribe();
   }
 
+  ClearVote(roomId: string) {
+    const body = {"roomId":roomId};
+    this.http.post(`${this.baseUrl}/Rooms/ClearVotes?roomId=${roomId}`, body).subscribe();
+  }
+
   createRoom(roomName: string, userName: string): Observable<Room> {
     const body = {roomName, userName};
     return this.http.post<Room>(`${this.baseUrl}/Rooms`, body);

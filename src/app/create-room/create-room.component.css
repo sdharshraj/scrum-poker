@@ -23,7 +23,7 @@ figure {
   width: 100%;
   float: left;
   background-image: url(src/assets/images/banner-bg.png);
-  padding: 30px 0px 20px 0px;
+  padding: 30px 0px 10px 0px;
   height: auto;
   background-size: 100%;
 }
