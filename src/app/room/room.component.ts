@@ -6,6 +6,7 @@ import * as signalR from "@microsoft/signalr";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { timer } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-room',
@@ -26,7 +27,7 @@ export class RoomComponent {
   currentUser: User | undefined;
   private hubConnection: signalR.HubConnection | undefined;
   notificationMessage: string = '';
-  baseUrl : string = "https://localhost:7054";
+  private eventUrl = environment.eventUrl;
   inviteLink: string | undefined;
   showVote: boolean = false;
 
@@ -36,7 +37,7 @@ export class RoomComponent {
     private router: Router) {
     // Create a new SignalR connection
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.baseUrl}/roomhub`)
+      .withUrl(`${this.eventUrl}/roomhub`)
       .build();
   }
 

@@ -30,6 +30,14 @@
             "scripts": []
           },
           "configurations": {
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
+            },
             "production": {
               "budgets": [
                 {
@@ -64,6 +72,9 @@
             },
             "development": {
               "browserTarget": "scrum-poker:build:development"
+            },
+            "local": {
+              "browserTarget": "scrum-poker:build:local"
             }
           },
           "defaultConfiguration": "development"
