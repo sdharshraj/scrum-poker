@@ -30,6 +30,7 @@ export class RoomComponent {
   private eventUrl = environment.eventUrl;
   inviteLink: string | undefined;
   showVote: boolean = false;
+  currentAdmin: User | undefined;
 
   constructor(private route: ActivatedRoute, 
     private scrumPokerService: ScrumpokerService,
@@ -83,6 +84,17 @@ export class RoomComponent {
             });
           }
         });
+
+        this.hubConnection?.on("VoteCleared", (roomId: string) => {
+          this.showNotification(`All user votes cleared.`);
+          if (this.roomId) {
+            this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
+              this.room = room;
+              this.users = this.room.users;
+              this.isCreator = this.room.adminId == this.scrumPokerService.adminId;
+            });
+          }
+        });
       }).catch((err) => {
         console.error(`Error starting SignalR connection: ${err}`);
       });
@@ -93,6 +105,7 @@ export class RoomComponent {
         this.room = room;
         this.votes = this.room.votes;
         this.isCreator = this.room.adminId == this.scrumPokerService.adminId;
+        this.currentAdmin = room.users[0]
         this.hubConnection?.invoke('UpdateJoinedUsername', this.room.createdBy, this.roomId);
       },
       (error: any) => {
@@ -138,6 +151,16 @@ export class RoomComponent {
       this.scrumPokerService.UserVote(card, this.currentUser.id, this.currentUser.roomId);
   }
 
+  voteAdmin(card: string) {
+    if (this.currentAdmin)
+      this.scrumPokerService.UserVote(card, this.currentAdmin.id, this.currentAdmin.roomId);
+  }
+
+  clearVote(){
+    if(this.currentAdmin)
+      this.scrumPokerService.ClearVote(this.currentAdmin.roomId);
+  }
+
   showNotification(message: string): void {
     const snackBarRef = this.snackBar.open(message, 'Dismiss', {
       duration: 1500, 
@@ -160,6 +183,10 @@ export class RoomComponent {
 
   toggleVoteVisibility() {
     this.showVote = !this.showVote;
+  }
+
+  navigateToHome(){
+    this.router.navigate(['/']);
   }
 }
 
