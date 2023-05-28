@@ -1,40 +1,43 @@
-
 <div class="services_section">
-    <div class="container">
-      <h1 class="services_text">CREATE ROOM</h1>
-    </div>
+  <div class="container">
+    <h1 class="services_text">CREATE ROOM</h1>
+  </div>
 </div>
 <div class="login_section">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-          <div class="card card-signin my-5">
-            <div class="card-body">
-              <h5 class="card-title text-center">Room details please!</h5>
-              <form class="form-signin">
-                <div class="custom-control mb-3">
-                    <label class="custom-control-label" for="input-roomName">Enter room name:</label>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Room details please!</h5>
+            <form class="form-signin" (ngSubmit)="createRoom()" #roomForm="ngForm">
+              <div class="custom-control mb-3">
+                <label class="custom-control-label" for="input-roomName">Enter room name:</label>
+              </div>
+              <div class="form-label-group">
+                <input [(ngModel)]="roomName" id="input-roomName" name="input-roomName" class="form-control" autofocus required>
+                <div *ngIf="roomForm.submitted && roomForm.controls['input-roomName'].hasError('required')" class="text-danger">
+                  Room name is required.
                 </div>
-                <div class="form-label-group">
-                  <input [(ngModel)]="roomName" id="input-roomName" name="input-roomName" class="form-control" autofocus>
+              </div>
+              <div class="custom-control mb-3">
+                <label class="custom-control-label" for="input-userName">Your name:</label>
+              </div>
+              <div class="form-label-group">
+                <input [(ngModel)]="userName" id="input-userName" name="input-userName" class="form-control" required>
+                <div *ngIf="roomForm.submitted && roomForm.controls['input-userName'].hasError('required')" class="text-danger">
+                  User name is required.
                 </div>
-                <div class="custom-control mb-3">
-                    <label class="custom-control-label" for="input-userName">Your name:</label>
-                </div>
-                <div class="form-label-group">
-                  <input [(ngModel)]="userName" id="input-userName" name="input-userName" class="form-control" >
-                </div>
-                <button class="btn btn-lg btn-primary btn-block text-uppercase" (click)="createRoom()" [disabled]="creatingRoom">
-                  <span *ngIf="creatingRoom" class="spinner-border spinner-border-sm" role="status"></span>
-                  <span *ngIf="!creatingRoom">Create room!</span>
-                </button>
-                <hr class="my-4">
-              </form>
-            </div>
+              </div>
+              <button type="submit" class="btn btn-lg btn-primary btn-block text-uppercase" [disabled]="creatingRoom">
+                <span *ngIf="creatingRoom" class="spinner-border spinner-border-sm" role="status"></span>
+                <span *ngIf="!creatingRoom">Create room!</span>
+              </button>
+              <hr class="my-4">
+            </form>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  
+</div>
