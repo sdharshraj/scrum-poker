@@ -8,6 +8,8 @@ const routes: Routes = [
   { path: '', component: CreateRoomComponent },
   { path: 'room/:id', component: RoomComponent },
   { path: 'create-room', component: CreateRoomComponent },
+  // Wildcard route for navigation fallback
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
