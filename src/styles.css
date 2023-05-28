@@ -1,9 +1,9 @@
 .custom-snackbar {
-    top: 0;
-    right: 0;
-    transform: translate(-10px, 10px); /* Adjust the translation values as needed */
-  }
-
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
   
 .services_section {
   background-size: cover;

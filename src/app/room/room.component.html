@@ -76,7 +76,8 @@
                                                 </td>
                                                 <td class="candidate-list-favourite-time text-center">
                                                     <span class="candidate-list-time order-1" *ngIf="user.vote">✅</span>
-                                                    <span class="candidate-list-time order-1" *ngIf="!user.vote">⏳</span>
+                                                    <span class="candidate-list-time order-1"
+                                                        *ngIf="!user.vote">⏳</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -151,7 +152,8 @@
                                                 </td>
                                                 <td class="candidate-list-favourite-time text-center">
                                                     <span class="candidate-list-time order-1" *ngIf="user.vote">✅</span>
-                                                    <span class="candidate-list-time order-1" *ngIf="!user.vote">⏳</span>
+                                                    <span class="candidate-list-time order-1"
+                                                        *ngIf="!user.vote">⏳</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -177,8 +179,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div *ngIf="!room" class="loading-section">
     <p>Loading...</p>
