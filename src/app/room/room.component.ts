@@ -18,7 +18,7 @@ export class RoomComponent {
   room: Room | undefined;
   welcomeMessage: string | undefined;
   roomId: string | null | undefined;
-  userName: string | undefined;
+  userNameValue: string | undefined;
   votes: Vote[] | undefined;
   users: User[] | undefined;
   isCreator = false;
@@ -33,7 +33,10 @@ export class RoomComponent {
   showVote: boolean = false;
   currentAdmin: User | undefined;
   private appUrl = environment.appUrl;
-  joiningRooom: boolean = false;
+  joiningRoom: boolean = false;
+  voting: boolean = false;
+  adminVoting: boolean = false;
+  clearingVote: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private scrumPokerService: ScrumpokerService,
@@ -82,6 +85,8 @@ export class RoomComponent {
         this.hubConnection?.on("UserVoted", (vote: number) => {
           if (vote && this.roomId) {
             this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
+              this.adminVoting = false;
+              this.voting = false;
               this.room = room;
               this.users = this.room.users;
               this.isCreator = this.room.adminId == this.scrumPokerService.adminId;
@@ -93,6 +98,7 @@ export class RoomComponent {
           this.showNotification(`All user votes cleared.`);
           if (this.roomId) {
             this.scrumPokerService.getRoom(this.roomId).subscribe((room: Room) => {
+              this.clearingVote = false;
               this.room = room;
               this.users = this.room.users;
               this.isCreator = this.room.adminId == this.scrumPokerService.adminId;
@@ -128,21 +134,21 @@ export class RoomComponent {
     }
   }
   joinRoom(): void {
-    this.joiningRooom = true;
-    if (this.userName) {
-      this.scrumPokerService.addUserToRoom(this.roomId, this.userName).subscribe(
+    this.joiningRoom = true;
+    if (this.userNameValue) {
+      this.scrumPokerService.addUserToRoom(this.roomId, this.userNameValue).subscribe(
         (user: User) => {
-          this.joiningRooom = false;
+          this.joiningRoom = false;
           this.currentUser = user;
           this.scrumPokerService.currentUser = user;
           this.welcomeMessage = `Welcome, ${this.scrumPokerService.currentUser?.name}`;
-          this.hubConnection?.invoke('UpdateJoinedUsername', this.userName, this.roomId);
+          this.hubConnection?.invoke('UpdateJoinedUsername', this.userNameValue, this.roomId);
         },
         (error: any) => {
-          this.joiningRooom = false;
+          this.joiningRoom = false;
           if (error && error.status === 409) {
             console.log("Conflict: User already exists in the room.", error);
-            this.showNotification(`${this.userName} already exists in the room. Please select a different name.`);
+            this.showNotification(`${this.userNameValue} already exists in the room. Please select a different name.`);
           } else {
             console.error("An error occurred while joining the room.", error);
           }
@@ -152,17 +158,22 @@ export class RoomComponent {
   }
 
   vote(card: string) {
-    if (this.currentUser)
+    if (this.currentUser){
+      this.voting = true;
       this.scrumPokerService.UserVote(card, this.currentUser.id, this.currentUser.roomId);
+    }
   }
 
   voteAdmin(card: string) {
-    if (this.currentAdmin)
+    if (this.currentAdmin) {
+      this.adminVoting = true;
       this.scrumPokerService.UserVote(card, this.currentAdmin.id, this.currentAdmin.roomId);
+    }
   }
 
   clearVote() {
     if (this.currentAdmin) {
+      this.clearingVote = true;
       this.showVote = false;
       this.scrumPokerService.ClearVote(this.currentAdmin.roomId);
     }

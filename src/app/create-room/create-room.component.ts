@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ScrumpokerService } from '../scrum-poker.service';
 import { Router } from '@angular/router';
 import { Room } from '../Model/Room';
@@ -13,16 +14,19 @@ export class CreateRoomComponent {
   userName: string = '';
   roomId: string = '';
   creatingRoom: boolean = false;
-
+  @ViewChild('roomForm', { static: false })
+  roomForm: NgForm | undefined;
   constructor(private scrumpokerService: ScrumpokerService, private router: Router) {}
 
   createRoom() {
-    this.creatingRoom = true;
-    this.scrumpokerService.createRoom(this.roomName, this.userName).subscribe((room: Room) => {
-      this.roomId = room.id;
-      this.scrumpokerService.adminId = room.adminId;
-      this.creatingRoom = false;
-      this.router.navigate([`/room/${room.id}`]);
-    });
+    if (this.roomForm?.valid) {
+      this.creatingRoom = true;
+      this.scrumpokerService.createRoom(this.roomName, this.userName).subscribe((room: Room) => {
+        this.roomId = room.id;
+        this.scrumpokerService.adminId = room.adminId;
+        this.creatingRoom = false;
+        this.router.navigate([`/room/${room.id}`]);
+      });
+    }
   }
 }

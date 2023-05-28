@@ -3,30 +3,37 @@
         <h1 class="services_text" *ngIf="welcomeMessage">{{ welcomeMessage }}</h1>
         <h1 class="services_text" *ngIf="isCreator">Welcome, {{room.createdBy}}</h1>
 
-            <div class="row">
-                <div class="col-sm">
-                    <h3>Room: {{ room.roomName }}</h3>
-                    <p>Admin: {{ room.createdBy }}</p>
-                </div>
-                <div class="col-sm"></div>
-                <div class="col-sm"></div>
-                <div class="col-sm">
-                    <button class="btn btn-success btn-block" ngxClipboard [cbContent]="inviteLink"
-                        (cbOnSuccess)="onCopySuccess()">Copy room link 🔗</button>
-                    <button style="float: right;" class="btn btn-secondary btn-block" (click)="navigateToHome()">New
-                        room 👉</button>
-                </div>
+        <div class="row">
+            <div class="col-sm">
+                <h3>Room: {{ room.roomName }}</h3>
+                <p>Admin: {{ room.createdBy }}</p>
             </div>
+            <div class="col-sm"></div>
+            <div class="col-sm"></div>
+            <div class="col-sm">
+                <button class="btn btn-success btn-block" ngxClipboard [cbContent]="inviteLink"
+                    (cbOnSuccess)="onCopySuccess()">Copy room link 🔗</button>
+                <button style="float: right;" class="btn btn-secondary btn-block" (click)="navigateToHome()">New
+                    room 👉</button>
+            </div>
+        </div>
     </div>
 
     <div class="container" *ngIf="!isCreator && !currentUser">
         <h1 class="best_taital">Enter your name to join the room.</h1>
         <div class="box_main">
-            <input class="form-control email_bt" placeholder="Your name" [(ngModel)]="userName">
-            <button class="join-room-btn" (click)="joinRoom()" [disabled]="joiningRooom">
-                <span *ngIf="joiningRooom" class="spinner-border spinner-border-sm" role="status"></span>
-                <span *ngIf="!joiningRooom">Join Room</span>
-              </button>
+            <input class="form-control email_bt" placeholder="Your name" [(ngModel)]="userNameValue" name="userName"
+                required #userName="ngModel">
+            <button class="join-room-btn" (click)="joinRoom()" [disabled]="joiningRoom || userName.invalid">
+                <span *ngIf="joiningRoom" class="spinner-border spinner-border-sm" role="status"></span>
+                <span *ngIf="!joiningRoom">Join Room</span>
+            </button>
+        </div>
+        <div class="box_main">
+            <div *ngIf="userName.invalid && (userName.dirty || userName.touched)"
+                class="text-danger join-room-error-text">
+                <div *ngIf="userName.errors?.['required']">Please enter your name.</div>
+            </div>
         </div>
     </div>
 </div>
@@ -65,10 +72,11 @@
                                                     <span class="candidate-list-time order-1"
                                                         *ngIf="showVote || user.name === currentUser.name">{{user.vote}}</span>
                                                     <span class="candidate-list-time order-1"
-                                                        *ngIf="!showVote && user.name !== currentUser.name">🤔</span>
+                                                        *ngIf="!showVote && user.name !== currentUser.name">🔒</span>
                                                 </td>
                                                 <td class="candidate-list-favourite-time text-center">
                                                     <span class="candidate-list-time order-1" *ngIf="user.vote">✅</span>
+                                                    <span class="candidate-list-time order-1" *ngIf="!user.vote">⏳</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -80,7 +88,9 @@
                                 <div class="container">
                                     <div *ngIf="currentAdmin" class="cards">
                                         <div class="card" *ngFor="let card of cards" (click)="vote(card)">
-                                            {{ card }}
+                                            <span *ngIf="voting" class="spinner-border spinner-border-sm"
+                                                role="status"></span>
+                                            <span *ngIf="!voting">{{ card }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -103,12 +113,16 @@
                                     <div class="div-btn-vote">
                                         <button class="btn btn-showVote btn-primary btn-block" *ngIf="showVote"
                                             (click)="toggleVoteVisibility()">Hide
-                                            Vote</button>
+                                            Vote 🙈</button>
                                         <button class="btn btn-showVote btn-primary btn-block" *ngIf="!showVote"
                                             (click)="toggleVoteVisibility()">Show
-                                            Vote</button>
-                                        <button class="btn btn-showVote btn-danger btn-block"
-                                            (click)="clearVote()">Reset votes</button>
+                                            Vote 👀</button>
+                                        <button type="submit" class="btn btn-showVote btn-danger btn-block"
+                                            (click)="clearVote()" [disabled]="clearingVote">
+                                            <span *ngIf="clearingVote" class="spinner-border spinner-border-sm"
+                                                role="status"></span>
+                                            <span *ngIf="!clearingVote">Reset votes ⚠️</span>
+                                        </button>
                                     </div>
                                     <table class="table manage-candidates-top mb-0">
                                         <thead>
@@ -133,10 +147,11 @@
                                                     <span class="candidate-list-time order-1"
                                                         *ngIf="showVote">{{user.vote}}</span>
                                                     <span class="candidate-list-time order-1"
-                                                        *ngIf="!showVote">🤔</span>
+                                                        *ngIf="!showVote">🔒</span>
                                                 </td>
                                                 <td class="candidate-list-favourite-time text-center">
                                                     <span class="candidate-list-time order-1" *ngIf="user.vote">✅</span>
+                                                    <span class="candidate-list-time order-1" *ngIf="!user.vote">⏳</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -148,7 +163,9 @@
                                 <div class="container">
                                     <div *ngIf="currentAdmin" class="cards">
                                         <div class="card" *ngFor="let card of cards" (click)="voteAdmin(card)">
-                                            {{ card }}
+                                            <span *ngIf="adminVoting" class="spinner-border spinner-border-sm"
+                                                role="status"></span>
+                                            <span *ngIf="!adminVoting">{{ card }}</span>
                                         </div>
                                     </div>
                                 </div>

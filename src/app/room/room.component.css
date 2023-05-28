@@ -120,7 +120,10 @@ h1 {
 .join-room-btn a{
   color: #ffffff;
 }
-
+.join-room-error-text{
+  display: flex;
+  justify-content: center;
+}
 .card {
   display: flex;
   justify-content: center;
