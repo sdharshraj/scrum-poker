@@ -33,6 +33,7 @@ export class RoomComponent {
   showVote: boolean = false;
   currentAdmin: User | undefined;
   private appUrl = environment.appUrl;
+  joiningRooom: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private scrumPokerService: ScrumpokerService,
@@ -127,15 +128,18 @@ export class RoomComponent {
     }
   }
   joinRoom(): void {
+    this.joiningRooom = true;
     if (this.userName) {
       this.scrumPokerService.addUserToRoom(this.roomId, this.userName).subscribe(
         (user: User) => {
+          this.joiningRooom = false;
           this.currentUser = user;
           this.scrumPokerService.currentUser = user;
           this.welcomeMessage = `Welcome, ${this.scrumPokerService.currentUser?.name}`;
           this.hubConnection?.invoke('UpdateJoinedUsername', this.userName, this.roomId);
         },
         (error: any) => {
+          this.joiningRooom = false;
           if (error && error.status === 409) {
             console.log("Conflict: User already exists in the room.", error);
             this.showNotification(`${this.userName} already exists in the room. Please select a different name.`);

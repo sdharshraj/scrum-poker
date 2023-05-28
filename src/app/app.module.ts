@@ -10,7 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { AddMemberComponent } from './add-member/add-member.component';
 import { RoomComponent } from './room/room.component';
 import { CreateRoomComponent } from './create-room/create-room.component';
 import { ScrumVoteCardComponent } from './scrum-vote-card/scrum-vote-card.component';
@@ -20,7 +19,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
-    AddMemberComponent,
     RoomComponent,
     CreateRoomComponent,
     ScrumVoteCardComponent
