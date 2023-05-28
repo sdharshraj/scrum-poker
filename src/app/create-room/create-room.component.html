@@ -24,7 +24,10 @@
                 <div class="form-label-group">
                   <input [(ngModel)]="userName" id="input-userName" name="input-userName" class="form-control" >
                 </div>
-                <button class="btn btn-lg btn-primary btn-block text-uppercase" (click)="createRoom()">Create room!</button>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" (click)="createRoom()" [disabled]="creatingRoom">
+                  <span *ngIf="creatingRoom" class="spinner-border spinner-border-sm" role="status"></span>
+                  <span *ngIf="!creatingRoom">Create room!</span>
+                </button>
                 <hr class="my-4">
               </form>
             </div>

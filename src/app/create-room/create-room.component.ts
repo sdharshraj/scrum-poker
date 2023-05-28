@@ -12,14 +12,16 @@ export class CreateRoomComponent {
   roomName: string = '';
   userName: string = '';
   roomId: string = '';
+  creatingRoom: boolean = false;
 
   constructor(private scrumpokerService: ScrumpokerService, private router: Router) {}
 
   createRoom() {
-    console.log("rooma name: " + this.roomName + "user name " +  this.userName);
+    this.creatingRoom = true;
     this.scrumpokerService.createRoom(this.roomName, this.userName).subscribe((room: Room) => {
       this.roomId = room.id;
       this.scrumpokerService.adminId = room.adminId;
+      this.creatingRoom = false;
       this.router.navigate([`/room/${room.id}`]);
     });
   }
